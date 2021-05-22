@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import DiscoverBlock from './DiscoverBlock/components/DiscoverBlock';
 import '../styles/_discover.scss';
+import {DiscoverAPI} from '../../../api';
 
 export default class Discover extends Component {
   constructor() {
@@ -12,6 +13,17 @@ export default class Discover extends Component {
       categories: []
     };
   }
+
+  loadData = async (key, loadData) => {
+    let data = await loadData()
+    this.setState({ [key]: data });
+  };
+
+  componentDidMount = async () => {
+    await this.loadData('newReleases', DiscoverAPI.getNewReleases);
+    await this.loadData('playlists', DiscoverAPI.getFeaturedPlaylists);
+    await this.loadData('categories', DiscoverAPI.getCategories);
+  };
 
   render() {
     const { newReleases, playlists, categories } = this.state;
